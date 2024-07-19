@@ -1,0 +1,17 @@
+Given the latest 100 tweets data related to "LLM Agent", I need you to perform an analysis to identify the top 10 tweets that are most valuable for researchers in this field. Each selected tweet should be presented in a structured format with the following details:
+
+1. "Title": A concise title derived from the tweet content or topic.
+2. "Main Content": A brief summary of the tweet in one or two sentences, highlighting the main message or insight.
+3. "Original Text": The full text of the tweet.
+4. "Important Links Included in the Tweet": List any URLs included in the tweet.
+5. "Poster": The username of the tweet's author.
+6. "Time": The date and time when the tweet was posted.
+
+Follow these steps to perform the analysis:
+1. Review each tweet and assess its relevance and value based on the novelty, depth of insight, and relevance to ongoing research in the field of Large Language Models (LLMs).
+2. Focus on tweets that discuss new findings, methodologies, or have a high engagement indicating significant interest from the community.
+3. Extract and list any links provided in the tweets as these might direct to research papers, articles, or further significant readings.
+4. Summarize the main point of each selected tweet in the "Main Content" field to give a quick insight into why the tweet is valuable.
+5. Format the data according to the structure provided and ensure all fields are correctly filled for each of the top 10 tweets.
+
+Please proceed with the analysis and present the top 10 tweets in the specified format. Thank you.
