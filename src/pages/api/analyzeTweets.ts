@@ -1,17 +1,36 @@
 import { json } from "stream/consumers";
-
+interface TweetData {
+    id: string;
+    text: string;
+  }
+  
+  interface TweetsResponse {
+    data: TweetData[];
+  }
+  
+  interface AnalyzedTweet {
+    Title: string;
+    Content: string;
+    Text: string;
+    Links: string[];
+    Id: string;
+  }
 // analyzeTweets.ts
-function formatTweetsData(tweetsData) {
+function isKeyOfAnalyzedTweet(key: any): key is keyof AnalyzedTweet {
+    return ['Title', 'Content', 'Text', 'Links', 'Id'].includes(key);
+}
+
+function formatTweetsData(tweetsData: TweetsResponse): string {
     return tweetsData.data.map(tweet => `Tweet ID: ${tweet.id}, Text: ${tweet.text}`).join('\n');
 }
 
-function parseGPTResponse(responseText) {
-    const tweetsData = [];
+function parseGPTResponse(responseText: string): AnalyzedTweet[] {
+    const tweetsData: AnalyzedTweet[] = [];
     const tweetBlocks = responseText.split('***').map(block => block.trim()).filter(block => block !== '');
 
     tweetBlocks.forEach(block => {
         const lines = block.split('\n');
-        const tweet = {};
+        const tweet: Partial<AnalyzedTweet> = {};
 
         lines.forEach(line => {
             // const [key, value] = line.split(':').map(part => part.trim());
@@ -23,20 +42,21 @@ function parseGPTResponse(responseText) {
                     // Assuming links are separated by commas if there are multiple links
                     console.log("current link: ", value)
                     tweet[key] = value.includes(',') ? value.split(',').map(link => link.trim()) : [value];
-                } else {
-                    tweet[key] = value;
+                } else if (isKeyOfAnalyzedTweet(key)) {
+                    tweet[key as keyof Omit<AnalyzedTweet, 'Links'>] = value; 
                 }
             }
         });
 
-        tweetsData.push(tweet);
+        if (tweet.Title && tweet.Content && tweet.Text && tweet.Links && tweet.Id) {
+            tweetsData.push(tweet as AnalyzedTweet);
+        }
     });
 
     return tweetsData;
 }
 
-
-async function fetchTweetDetails(tweetIds) {
+async function fetchTweetDetails(tweetIds: string[]): Promise<any[]> {
     const tweetsDetails = [];
 
     for (const id of tweetIds) {

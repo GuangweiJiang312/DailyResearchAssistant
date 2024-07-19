@@ -1,12 +1,15 @@
 // pages/api/twitter.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { analyzeTweetsWithGPT } from "./analyzeTweets"
-import { MongoClient } from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 // import redis from '../../lib/redis';
 
 // Create a single MongoClient instance (singleton pattern)
-let dbInstance = null;
+let dbInstance: Db | null = null;
 const uri = process.env.MONGODB_URI;
+if (!uri) {
+    throw new Error('MONGODB_URI is not defined in the environment variables');
+}
 const client = new MongoClient(uri);
 
 async function connectToDatabase() {
@@ -95,7 +98,13 @@ export default async function handler(
 
             res.status(200).json({ result: analysisResults }); // 直接返回获取到的数据
         } catch (error) {
-            res.status(500).json({ message: 'Error fetching tweets', error: error.message });
+            if (error instanceof Error) {
+                res.status(500).json({ message: 'Error fetching tweets', error: error.message });
+            } else {
+                // If it's not an Error instance, send a generic error message
+                res.status(500).json({ message: 'Error fetching tweets', error: 'An unexpected error occurred' });
+            }
+            // res.status(500).json({ message: 'Error fetching tweets', error: error.message });
         }
     } else {
         res.setHeader('Allow', ['POST']);
