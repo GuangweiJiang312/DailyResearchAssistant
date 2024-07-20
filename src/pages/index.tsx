@@ -25,14 +25,33 @@ export default function Home() {
 
     if (response.ok) {
       const data = await response.json();
-      setTweets(data.result); // Assume data is the array of tweet objects
-      setLoading(false);
-      console.log("data", data.result);
+      // setTweets(data.result);
+      // setLoading(false);
+      // console.log("data", data.result);
+      analyzeTweets(data.result); 
     } else {
       console.error('Failed to fetch tweets');
       setLoading(false);
       setTweets([]); // Clear previous results if the search failed
     }
+  }
+
+  async function analyzeTweets(tweetData: Record<string, any>) {
+    const response = await fetch('/api/callAnalyzeTweets', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ tweetData, keyword })
+    });
+
+    if (response.ok) {
+      const analyzedData = await response.json();
+      setTweets(analyzedData.result);
+    } else {
+      console.error('Failed to analyze tweets');
+    }
+    setLoading(false);
   }
 
   return (

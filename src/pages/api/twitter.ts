@@ -78,25 +78,25 @@ export default async function handler(
             console.log("response data !!!!!!!!!!!!!!");
             console.log(data);
 
-            const analysisResults = await analyzeTweetsWithGPT(keyword, data);
+            // const analysisResults = await analyzeTweetsWithGPT(keyword, data);
 
-            console.log("analysisResults !!!!!!!!!");
-            console.log(analysisResults);
+            // console.log("analysisResults !!!!!!!!!");
+            // console.log(analysisResults);
 
             // 检查是否存在现有记录
-            const existingRecord = await collection.findOne({ keyword });
-            console.log("existingRecord", existingRecord);
-            console.log("update database");
-            if (existingRecord) {
-                await collection.updateOne({ keyword }, { $set: { results: analysisResults } });
-            } else {
-                await collection.insertOne({ keyword, results: analysisResults });
-            }
+            // const existingRecord = await collection.findOne({ keyword });
+            // console.log("existingRecord", existingRecord);
+            // console.log("update database");
+            // if (existingRecord) {
+            //     await collection.updateOne({ keyword }, { $set: { results: analysisResults } });
+            // } else {
+            //     await collection.insertOne({ keyword, results: analysisResults });
+            // }
 
             // Cache the new results in Redis for 1 hour
             // await redis.set(cacheKey, JSON.stringify(analysisResults), 'EX', 3600);
 
-            res.status(200).json({ result: analysisResults }); // 直接返回获取到的数据
+            res.status(200).json({ result: data }); // 直接返回获取到的数据
         } catch (error) {
             if (error instanceof Error) {
                 res.status(500).json({ message: 'Error fetching tweets', error: error.message });
