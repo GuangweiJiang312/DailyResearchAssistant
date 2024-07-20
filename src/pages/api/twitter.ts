@@ -53,12 +53,12 @@ export default async function handler(
             //     return res.status(200).json({ result: JSON.parse(cachedResults) });
             // }
 
-            console.log("1..............");
-            const db = await connectToDatabase();
-            console.log("db :", db);
-            console.log("2..............");
-            const collection = db.collection('tweets_analysis');
-            console.log("create/connect database");
+            // console.log("1..............");
+            // const db = await connectToDatabase();
+            // console.log("db :", db);
+            // console.log("2..............");
+            // const collection = db.collection('tweets_analysis');
+            // console.log("create/connect database");
 
             const response = await fetch(url, {
                 method: 'GET', 
