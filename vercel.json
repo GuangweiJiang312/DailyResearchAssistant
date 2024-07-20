@@ -1,6 +1,6 @@
 {
     "functions": {
-        "api/callAnalyzeTweets.js": {
+        "pages/api/**/*.ts": {
             "maxDuration": 60
         }
     }
