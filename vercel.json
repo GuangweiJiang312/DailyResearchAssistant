@@ -1,6 +1,6 @@
 {
     "functions": {
-        "src/api/callAnalyzeTweets.ts": {
+        "app/api/callAnalyzeTweets.ts": {
             "maxDuration": 60
         }
     }
