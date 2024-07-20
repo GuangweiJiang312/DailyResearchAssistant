@@ -10,9 +10,11 @@ interface Tweet {
 
 export default function Home() {
   const [keyword, setKeyword] = useState('');
-  const [tweets, setTweets] = useState<Tweet[]>([]); 
+  const [tweets, setTweets] = useState<Tweet[]>([]);
+  const [loading, setLoading] = useState(false); 
 
   async function searchTweets() {
+    setLoading(true);
     const response = await fetch('/api/twitter', {
       method: 'POST',
       headers: {
@@ -24,9 +26,11 @@ export default function Home() {
     if (response.ok) {
       const data = await response.json();
       setTweets(data.result); // Assume data is the array of tweet objects
+      setLoading(false);
       console.log("data", data.result);
     } else {
       console.error('Failed to fetch tweets');
+      setLoading(false);
       setTweets([]); // Clear previous results if the search failed
     }
   }
@@ -45,7 +49,10 @@ export default function Home() {
           Search
         </button>
       </div>
-      <ul>
+      {loading ? (
+        <div>Loading...</div> 
+      ) : (
+        <ul>
         {tweets.map((tweet, index) => (
           <li key={index} className="bg-white shadow overflow-hidden rounded-md px-6 py-4 mb-4">
             <h3 className="font-bold text-xl">{tweet.Title}</h3>
@@ -60,6 +67,7 @@ export default function Home() {
           </li>
         ))}
       </ul>
+      )}
     </div>
   );
 }
